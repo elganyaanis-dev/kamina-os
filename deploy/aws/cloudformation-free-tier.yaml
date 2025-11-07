@@ -1,0 +1,71 @@
+# deploy/aws/cloudformation-free-tier.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Kamina OS - Free Tier Deployment'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: development
+    AllowedValues: [development, staging]
+
+Resources:
+  # EC2 Instance (t2.micro - free tier eligible)
+  KaminaEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0c02fb55956c7d316 # Amazon Linux 2023
+      KeyName: kamina-key
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum update -y
+          yum install -y docker
+          service docker start
+          usermod -a -G docker ec2-user
+          
+          # Install Docker Compose
+          curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          
+          # Create app directory
+          mkdir -p /home/ec2-user/kamina-os
+          cd /home/ec2-user/kamina-os
+
+  # Security Group
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+
+  # S3 Bucket for backups
+  BackupBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub kamina-backup-${AWS::AccountId}
+
+Outputs:
+  InstancePublicDNS:
+    Description: Public DNS of EC2 instance
+    Value: !GetAtt KaminaEC2Instance.PublicDnsName
+  InstancePublicIP:
+    Description: Public IP of EC2 instance
+    Value: !GetAtt KaminaEC2Instance.PublicIp
+  BackupBucketName:
+    Description: S3 bucket for backups
+    Value: !Ref BackupBucket
