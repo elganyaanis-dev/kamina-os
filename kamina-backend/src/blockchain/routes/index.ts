@@ -1,9 +1,13 @@
 // src/blockchain/routes/index.ts
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { blockchainService } from '../services/blockchain.service';
+import { tokenomicsRoutes } from './tokenomics';
 import { ApiResponse } from '../../types';
 
 export async function kaminaRoutes(fastify: FastifyInstance) {
+  // Include tokenomics routes
+  fastify.register(tokenomicsRoutes);
+
   // Route pour obtenir le solde d'une adresse
   fastify.get('/balance/:address', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
