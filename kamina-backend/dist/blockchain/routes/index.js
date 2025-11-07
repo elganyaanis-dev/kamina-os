@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.kaminaRoutes = kaminaRoutes;
 const blockchain_service_1 = require("../services/blockchain.service");
+const tokenomics_1 = require("./tokenomics");
 async function kaminaRoutes(fastify) {
+    fastify.register(tokenomics_1.tokenomicsRoutes);
     fastify.get('/balance/:address', async (request, reply) => {
         try {
             const { address } = request.params;

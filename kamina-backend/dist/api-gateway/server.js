@@ -64,7 +64,7 @@ async function main() {
         });
     });
     try {
-        await fastify.listen({ port: 8080, host: '0.0.0.0' });
+        await fastify.listen({ port: 8080, host: "127.0.0.1" });
         console.log('🚀 Kamina API Gateway running on port 8080');
         console.log('🤖 KaminaLLM-7B AI Service: Enabled');
     }
