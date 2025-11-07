@@ -1,0 +1,62 @@
+{
+  "name": "kamina-backend",
+  "version": "1.0.0",
+  "description": "Kamina OS API Gateway - High Performance Backend",
+  "main": "dist/api-gateway/server.js",
+  "scripts": {
+    "dev": "tsx watch src/api-gateway/server.ts",
+    "start": "node dist/api-gateway/server.js",
+    "build": "tsc",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "docker:build": "docker build -t kamina-backend:latest .",
+    "docker:run": "docker run -p 8080:8080 --env-file .env kamina-backend:latest"
+  },
+  "keywords": [
+    "kamina",
+    "blockchain",
+    "api",
+    "fastify",
+    "typescript",
+    "ai"
+  ],
+  "author": "Kamina OS Team <dev@kamina.io>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.4.2",
+    "@fastify/rate-limit": "^8.0.3",
+    "@fastify/websocket": "^8.3.1",
+    "@simplewebauthn/server": "^8.3.5",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.10.0",
+    "fastify": "^4.25.2",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "kafkajs": "^2.2.4",
+    "pg": "^8.11.3",
+    "pino-pretty": "^10.3.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.6",
+    "@types/pg": "^8.10.9",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
