@@ -8,6 +8,7 @@ const websocket_1 = __importDefault(require("@fastify/websocket"));
 const cors_1 = __importDefault(require("@fastify/cors"));
 const routes_1 = require("../auth/routes");
 const routes_2 = require("../blockchain/routes");
+const routes_3 = require("../ai-core/routes");
 const fastify = (0, fastify_1.default)({
     logger: {
         level: 'info',
@@ -42,11 +43,13 @@ async function main() {
                 blockchain: 'connected',
                 database: 'connected',
                 cache: 'connected',
+                ai: 'connected',
             },
         };
     });
     fastify.register(routes_1.authRoutes, { prefix: '/api/v1/auth' });
     fastify.register(routes_2.kaminaRoutes, { prefix: '/api/v1/kamina' });
+    fastify.register(routes_3.aiRoutes, { prefix: '/api/v1/ai' });
     fastify.setNotFoundHandler((request, reply) => {
         reply.status(404).send({
             error: 'Not Found',
@@ -63,6 +66,7 @@ async function main() {
     try {
         await fastify.listen({ port: 8080, host: '0.0.0.0' });
         console.log('🚀 Kamina API Gateway running on port 8080');
+        console.log('🤖 KaminaLLM-7B AI Service: Enabled');
     }
     catch (err) {
         fastify.log.error(err);
