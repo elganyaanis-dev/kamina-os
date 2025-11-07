@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  kamina-backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - BLOCKCHAIN_RPC_URL=${BLOCKCHAIN_RPC_URL}
+    env_file:
+      - .env.production
+    restart: unless-stopped
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=kamina
+      - POSTGRES_USER=kamina
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
