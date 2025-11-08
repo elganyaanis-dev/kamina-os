@@ -1,0 +1,102 @@
+# deploy/aws/cloudformation.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Kamina OS Cloud Deployment'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: production
+    AllowedValues: [staging, production]
+  DomainName:
+    Type: String
+    Default: kamina-os.com
+
+Resources:
+  # ECS Cluster
+  KaminaCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub kamina-${Environment}
+
+  # Backend Task Definition
+  BackendTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub kamina-backend-${Environment}
+      NetworkMode: awsvpc
+      Cpu: 512
+      Memory: 1024
+      RequiresCompatibilities: [FARGATE]
+      ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
+      ContainerDefinitions:
+        - Name: kamina-backend
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/kamina-backend:${Environment}
+          PortMappings:
+            - ContainerPort: 8080
+          Environment:
+            - Name: NODE_ENV
+              Value: !Ref Environment
+            - Name: JWT_SECRET
+              Value: '{{resolve:secretsmanager:kamina-jwt-secret:SecretString:jwtSecret}}'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref CloudWatchLogsGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: kamina-backend
+
+  # ECS Service
+  BackendService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub kamina-backend-${Environment}
+      Cluster: !Ref KaminaCluster
+      TaskDefinition: !Ref BackendTaskDefinition
+      DesiredCount: 2
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets: !Ref PublicSubnets
+          SecurityGroups:
+            - !Ref BackendSecurityGroup
+
+  # Security Group
+  BackendSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Kamina Backend
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+
+  # CloudWatch Logs
+  CloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/kamina-${Environment}
+      RetentionInDays: 30
+
+  # ECS Task Execution Role
+  ECSTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+Outputs:
+  BackendServiceURL:
+    Description: Backend Service URL
+    Value: !Sub http://${BackendService}.${AWS::Region}.elb.amazonaws.com
+  CloudWatchLogs:
+    Description: CloudWatch Logs Group
+    Value: !Ref CloudWatchLogsGroup

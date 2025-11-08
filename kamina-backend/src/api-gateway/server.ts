@@ -1,3 +1,4 @@
+// src/api-gateway/server.ts
 import Fastify from 'fastify';
 import fastifyWebSocket from '@fastify/websocket';
 import fastifyCors from '@fastify/cors';
@@ -44,6 +45,7 @@ async function main() {
         blockchain: 'connected',
         database: 'connected',
         cache: 'connected',
+        ai: 'connected',
       },
     };
   });
@@ -72,8 +74,9 @@ async function main() {
 
   // Start server
   try {
-    await fastify.listen({ port: 8080, host: '0.0.0.0' });
+    await fastify.listen({ port: 8080, host: "127.0.0.1" });
     console.log('🚀 Kamina API Gateway running on port 8080');
+    console.log('🤖 KaminaLLM-7B AI Service: Enabled');
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
