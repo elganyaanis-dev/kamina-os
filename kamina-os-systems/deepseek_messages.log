@@ -1,0 +1,35 @@
+[2025-11-09T03:12:30.710Z] SYSTEM: Serveur KAMINA-OS démarré
+[2025-11-09T03:12:52.209Z] DEEPSEEK: DeepSeek: Première connexion DeepSeek réussie!
+[2025-11-09T03:12:52.260Z] COMMAND: CMD Output: /data/data/com.termux/files/home/kamina-control
+total 302
+drwx------.  6 u0_a34 u0_a34  3440 Nov  9 04:12 .
+drwx------. 20 u0_a34 u0_a34  8192 Nov  9 04:08 ..
+-rw-------.  1 u0_a34 u0_a34  2241 Nov  9 02:24 auto_responses.js
+-rw-------.  1 u0_a34 u0_a34  6718 Nov  9 04:05 autonomous_dev.js
+-rw-------.  1 u0_a34 u0_a34  1724 Nov  9 03:42 control_bridge.js
+drwx------.  2 u0_a34 u0_a34  3440 Nov  9 03:54 core
+-rw-------.  1 u0_a34 u0_a34 18179 Nov  9 02:30 deepseek_clone_server.js
+-rw-------.  1 u0_a34 u0_a34   149 Nov  9 04:12 deepseek_messages.log
+-rw-------.  1 u0_a34 u0_a34   506 Nov  9 04:05 find_port.js
+-rw-------.  1 u0_a34 u0_a34  8741 Nov  9 02:25 kamina_autonomous_server.js
+-rw-------.  1 u0_a34 u0_a34 14304 Nov  9 02:15 kamina_chat_server.js
+-rw-------.  1 u0_a34 u0_a34 12667 Nov  9 02:07 kamina_intelligent_server.js
+-rw-------.  1 u0_a34 u0_a34   591 Nov  9 02:07 kamina_memory.json
+-rw-------.  1 u0_a34 u0_a34 10727 Nov  9 02:03 kamina_server.js
+-rw-------.  1 u0_a34 u0_a34  5492 Nov  9 04:12 kamina_system.js
+-rw-------.  1 u0_a34 u0_a34 25640 Nov  9 03:26 kamina_ultimate_interface.js
+-rw-------.  1 u0_a34 u0_a34 10286 Nov  9 02:59 keyboard_interface.js
+-rw-------.  1 u0_a34 u0_a34 10674 Nov  9 03:17 keyboard_interface_fixed.js
+drwx------.  2 u0_a34 u0_a34  3440 Nov  9 04:06 memory
+-rw-------.  1 u0_a34 u0_a34  8029 Nov  9 03:50 message_system.js
+-rw-------.  1 u0_a34 u0_a34 23221 Nov  9 02:38 multi_ai_coordinator.js
+drwx------. 89 u0_a34 u0_a34  4096 Nov  9 04:01 node_modules
+-rw-------.  1 u0_a34 u0_a34 45048 Nov  9 04:01 package-lock.json
+-rw-------.  1 u0_a34 u0_a34   103 Nov  9 04:01 package.json
+drwx------.  2 u0_a34 u0_a34  3440 Nov  9 03:54 protocols
+-rw-------.  1 u0_a34 u0_a34 12577 Nov  9 04:05 real_connection_2931.js
+-rw-------.  1 u0_a34 u0_a34   622 Nov  9 03:47 security_shield.js
+-rw-------.  1 u0_a34 u0_a34  7210 Nov  9 04:01 simple_server.js
+-rw-------.  1 u0_a34 u0_a34  3307 Nov  9 03:42 unified_system.js
+
+[2025-11-09T03:13:30.694Z] HEARTBEAT: Serveur actif
